@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Box Shadow Generator</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Nunito+Sans:wght@400;600;700;800;900&display=swap');
+
+* { box-sizing: border-box; }
+
+:root {
+  --navy: #1d3155;
+  --navy-2: #263f68;
+  --teal: #22ae98;
+  --teal-dark: #188f7e;
+  --teal-light: #e5f6f2;
+  --bg: #f5f8f8;
+  --line: #d9e2e4;
+  --muted: #60738e;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--navy);
+  font-family: "Nunito Sans", Arial, sans-serif;
+}
+
+.container {
+  width: min(1180px, calc(100% - 32px));
+  margin: auto;
+  padding: 42px 0 55px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(42px, 6vw, 66px);
+  line-height: 1;
+  letter-spacing: -3px;
+  font-weight: 900;
+  color: var(--navy);
+}
+
+h1 span { color: var(--teal); }
+
+.subtitle {
+  margin: 15px 0 0;
+  max-width: 800px;
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.intro-badge {
+  background: #edf4f6;
+  border-radius: 13px;
+  padding: 14px 18px;
+  min-width: 220px;
+  color: #526983;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.intro-badge b {
+  color: var(--teal);
+  font-size: 22px;
+  margin-right: 8px;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: .92fr 1.08fr;
+  gap: 18px;
+}
+
+.card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  padding: 28px;
+}
+
+.card-title {
+  margin: 0 0 25px;
+  font-size: 27px;
+  font-weight: 900;
+}
+
+.title-icon {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  margin-right: 12px;
+  border-radius: 10px;
+  background: var(--teal-light);
+  color: var(--teal);
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  font-size: 22px;
+}
+
+.control {
+  margin-bottom: 19px;
+}
+
+.control-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 9px;
+}
+
+.control-head label {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.value {
+  font: 13px "DM Mono", monospace;
+  background: #edf7f5;
+  color: var(--teal-dark);
+  padding: 5px 8px;
+  border-radius: 6px;
+}
+
+input[type="range"] {
+  width: 100%;
+  height: 5px;
+  appearance: none;
+  background: #dce4e8;
+  border-radius: 10px;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #b8c7d2;
+  box-shadow: 0 2px 6px rgba(30,50,80,.18);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #b8c7d2;
+}
+
+.divider {
+  height: 1px;
+  background: var(--line);
+  margin: 25px 0;
+}
+
+.colour-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+input[type="color"] {
+  width: 50px;
+  height: 43px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 4px;
+  background: white;
+  cursor: pointer;
+}
+
+.hex {
+  flex: 1;
+  height: 43px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 12px;
+  color: var(--navy);
+  font: 14px "DM Mono", monospace;
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggle-row strong {
+  display: block;
+  font-size: 16px;
+}
+
+.toggle-row small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.switch {
+  position: relative;
+  width: 49px;
+  height: 27px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-ui {
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+  background: #ccd7df;
+  cursor: pointer;
+}
+
+.switch-ui:before {
+  content: "";
+  position: absolute;
+  width: 21px;
+  height: 21px;
+  top: 3px;
+  left: 3px;
+  border-radius: 50%;
+  background: white;
+  transition: .2s;
+  box-shadow: 0 1px 3px #9995;
+}
+
+.switch input:checked + .switch-ui {
+  background: var(--teal);
+}
+
+.switch input:checked + .switch-ui:before {
+  transform: translateX(22px);
+}
+
+.preview {
+  height: 330px;
+  border-radius: 12px;
+  background: #eef4f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 35px;
+}
+
+.preview-box {
+  width: min(390px, 90%);
+  height: 190px;
+  background: white;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.preview-box h2 {
+  margin: 0 0 8px;
+  font-size: 28px;
+}
+
+.preview-box p {
+  margin: 0;
+  max-width: 220px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.reset {
+  float: right;
+  margin-top: -68px;
+  padding: 10px 15px;
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--navy);
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.code {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--navy);
+  border-radius: 11px;
+  color: white;
+}
+
+.code-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 13px;
+}
+
+.copy {
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  background: var(--teal);
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.copy:hover { background: var(--teal-dark); }
+
+pre {
+  margin: 0;
+  overflow-x: auto;
+  padding: 14px;
+  background: #ffffff0d;
+  border-radius: 7px;
+  font: 13px/1.6 "DM Mono", monospace;
+  color: #e3f7f3;
+}
+
+.quick {
+  grid-column: 1 / -1;
+}
+
+.quick-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 13px;
+}
+
+.quick-head h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.quick-head span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.quick-card {
+  min-height: 125px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: white;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  cursor: pointer;
+  transition: .15s;
+}
+
+.quick-card:hover,
+.quick-card.active {
+  border-color: var(--teal);
+  background: #f0faf8;
+}
+
+.mini-box {
+  flex: 0 0 76px;
+  width: 76px;
+  height: 76px;
+  background: white;
+  border-radius: 10px;
+}
+
+.quick-card h3 {
+  margin: 0 0 5px;
+  font-size: 19px;
+}
+
+.quick-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+@media (max-width: 850px) {
+  header { flex-direction: column; }
+  .intro-badge { min-width: 0; }
+  .main-grid { grid-template-columns: 1fr; }
+  .quick { grid-column: auto; }
+}
+
+@media (max-width: 560px) {
+  .container { width: calc(100% - 20px); padding-top: 25px; }
+  .card { padding: 20px; }
+  .quick-grid { grid-template-columns: 1fr; }
+  h1 { letter-spacing: -2px; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <div>
+    <h1>Box Shadow <span>Generator</span></h1>
+    <p class="subtitle">Adjust the sliders to create a shadow, preview it in real time and copy the CSS code.</p>
+  </div>
+  <div class="intro-badge"><b>✦</b> Create beautiful shadows<br>for your projects</div>
+</header>
+
+<div class="main-grid">
+
+<section class="card">
+  <h2 class="card-title"><span class="title-icon">☷</span> Shadow Settings</h2>
+
+  <div class="control">
+    <div class="control-head"><label>X Offset</label><span id="xVal" class="value">20px</span></div>
+    <input id="x" type="range" min="-60" max="60" value="20">
+  </div>
+
+  <div class="control">
+    <div class="control-head"><label>Y Offset</label><span id="yVal" class="value">20px</span></div>
+    <input id="y" type="range" min="-60" max="60" value="20">
+  </div>
+
+  <div class="control">
+    <div class="control-head"><label>Blur</label><span id="blurVal" class="value">40px</span></div>
+    <input id="blur" type="range" min="0" max="100" value="40">
+  </div>
+
+  <div class="control">
+    <div class="control-head"><label>Spread</label><span id="spreadVal" class="value">0px</span></div>
+    <input id="spread" type="range" min="-40" max="50" value="0">
+  </div>
+
+  <div class="control">
+    <div class="control-head"><label>Opacity</label><span id="opacityVal" class="value">0.3</span></div>
+    <input id="opacity" type="range" min="0" max="100" value="30">
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="control">
+    <div class="control-head"><label>Shadow Colour</label></div>
+    <div class="colour-row">
+      <input id="color" type="color" value="#6366F1">
+      <input id="hex" class="hex" value="#6366F1" maxlength="7">
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="toggle-row">
+    <div>
+      <strong>Inset Shadow</strong>
+      <small>Make the shadow appear inside the box</small>
+    </div>
+    <label class="switch">
+      <input id="inset" type="checkbox">
+      <span class="switch-ui"></span>
+    </label>
+  </div>
+</section>
+
+<section class="card">
+  <h2 class="card-title"><span class="title-icon">◉</span> Live Preview</h2>
+  <button id="reset" class="reset">↻ &nbsp;Reset</button>
+
+  <div class="preview">
+    <div id="previewBox" class="preview-box">
+      <h2>Your Box</h2>
+      <p>Adjust the sliders to see the shadow effect.</p>
+    </div>
+  </div>
+
+  <div class="code">
+    <div class="code-head">
+      <strong>〈/〉 &nbsp; CSS Code</strong>
+      <button id="copy" class="copy">▣ &nbsp; Copy CSS</button>
+    </div>
+    <pre id="code"></pre>
+  </div>
+</section>
+
+<section class="card quick">
+  <div class="quick-head">
+    <h2>⚡ &nbsp;Quick Presets</h2>
+    <span>Click a preset to apply</span>
+  </div>
+
+  <div class="quick-grid">
+    <div class="quick-card active" data-preset="soft">
+      <div id="miniSoft" class="mini-box"></div>
+      <div><h3>Soft</h3><p>A subtle, smooth shadow</p></div>
+    </div>
+    <div class="quick-card" data-preset="hard">
+      <div id="miniHard" class="mini-box"></div>
+      <div><h3>Hard</h3><p>A sharp, defined shadow</p></div>
+    </div>
+    <div class="quick-card" data-preset="floating">
+      <div id="miniFloating" class="mini-box"></div>
+      <div><h3>Floating</h3><p>A large, modern shadow</p></div>
+    </div>
+  </div>
+</section>
+
+</div>
+</div>
+
+<script>
+const x = document.getElementById("x");
+const y = document.getElementById("y");
+const blur = document.getElementById("blur");
+const spread = document.getElementById("spread");
+const opacity = document.getElementById("opacity");
+const color = document.getElementById("color");
+const hex = document.getElementById("hex");
+const inset = document.getElementById("inset");
+const previewBox = document.getElementById("previewBox");
+const code = document.getElementById("code");
+
+function rgba(hexColor, alpha) {
+  const r = parseInt(hexColor.slice(1,3), 16);
+  const g = parseInt(hexColor.slice(3,5), 16);
+  const b = parseInt(hexColor.slice(5,7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+function update() {
+  const alpha = Number(opacity.value) / 100;
+  const shadowColor = rgba(color.value, alpha);
+  const insetText = inset.checked ? "inset " : "";
+  const shadow = `${insetText}${x.value}px ${y.value}px ${blur.value}px ${spread.value}px ${shadowColor}`;
+
+  previewBox.style.boxShadow = shadow;
+  code.textContent = `box-shadow: ${shadow};`;
+
+  document.getElementById("xVal").textContent = `${x.value}px`;
+  document.getElementById("yVal").textContent = `${y.value}px`;
+  document.getElementById("blurVal").textContent = `${blur.value}px`;
+  document.getElementById("spreadVal").textContent = `${spread.value}px`;
+  document.getElementById("opacityVal").textContent = alpha.toFixed(2);
+  hex.value = color.value.toUpperCase();
+}
+
+function applyPreset(name) {
+  if (name === "soft") {
+    x.value = 0; y.value = 12; blur.value = 30; spread.value = 0; opacity.value = 20;
+  } else if (name === "hard") {
+    x.value = 8; y.value = 8; blur.value = 2; spread.value = 0; opacity.value = 35;
+  } else {
+    x.value = 0; y.value = 22; blur.value = 45; spread.value = 2; opacity.value = 28;
+  }
+
+  inset.checked = false;
+  document.querySelectorAll(".quick-card").forEach(c =>
+    c.classList.toggle("active", c.dataset.preset === name)
+  );
+  update();
+}
+
+[x,y,blur,spread,opacity,color,inset].forEach(el => {
+  el.addEventListener("input", update);
+  el.addEventListener("change", update);
+});
+
+hex.addEventListener("input", () => {
+  if (/^#[0-9a-fA-F]{6}$/.test(hex.value)) {
+    color.value = hex.value;
+    update();
+  }
+});
+
+document.querySelectorAll("[data-preset]").forEach(card => {
+  card.addEventListener("click", () => applyPreset(card.dataset.preset));
+});
+
+document.getElementById("reset").addEventListener("click", () => {
+  x.value = 20; y.value = 20; blur.value = 40;
+  spread.value = 0; opacity.value = 30;
+  color.value = "#6366F1"; inset.checked = false;
+  document.querySelectorAll(".quick-card").forEach(c =>
+    c.classList.toggle("active", c.dataset.preset === "soft")
+  );
+  update();
+});
+
+document.getElementById("copy").addEventListener("click", async () => {
+  await navigator.clipboard.writeText(code.textContent);
+  const button = document.getElementById("copy");
+  button.textContent = "✓ Copied!";
+  setTimeout(() => button.textContent = "▣  Copy CSS", 1200);
+});
+
+update();
+</script>
+</body>
+</html>
